@@ -1,0 +1,51 @@
+[0.068s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[0.124s] -- The C compiler identification is GNU 11.4.0
+[0.186s] -- The CXX compiler identification is GNU 11.4.0
+[0.195s] -- Detecting C compiler ABI info
+[0.267s] -- Detecting C compiler ABI info - done
+[0.275s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.275s] -- Detecting C compile features
+[0.276s] -- Detecting C compile features - done
+[0.279s] -- Detecting CXX compiler ABI info
+[0.364s] -- Detecting CXX compiler ABI info - done
+[0.373s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.373s] -- Detecting CXX compile features
+[0.374s] -- Detecting CXX compile features - done
+[0.377s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.548s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.638s] -- Found rclcpp: 16.0.8 (/opt/ros/humble/share/rclcpp/cmake)
+[0.680s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.686s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.695s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.710s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.731s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.807s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.809s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.924s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.954s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.010s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.019s] -- Looking for pthread.h
+[1.095s] -- Looking for pthread.h - found
+[1.096s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.171s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.172s] -- Found Threads: TRUE  
+[1.365s] [31mCMake Error at CMakeLists.txt:9 (find_package):
+[1.365s]   By not providing "Findserial.cmake" in CMAKE_MODULE_PATH this project has
+[1.365s]   asked CMake to find a package configuration file provided by "serial", but
+[1.365s]   CMake did not find one.
+[1.365s] 
+[1.365s]   Could not find a package configuration file provided by "serial" with any
+[1.365s]   of the following names:
+[1.365s] 
+[1.365s]     serialConfig.cmake
+[1.366s]     serial-config.cmake
+[1.366s] 
+[1.366s]   Add the installation prefix of "serial" to CMAKE_PREFIX_PATH or set
+[1.366s]   "serial_DIR" to a directory containing one of the above files.  If "serial"
+[1.366s]   provides a separate development package or SDK, be sure it has been
+[1.366s]   installed.
+[1.366s] 
+[1.366s] [0m
+[1.366s] -- Configuring incomplete, errors occurred!
+[1.366s] See also "/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher/CMakeFiles/CMakeOutput.log".
+[1.377s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher

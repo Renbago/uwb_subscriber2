@@ -1,0 +1,63 @@
+[0.068s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[0.129s] -- The C compiler identification is GNU 11.4.0
+[0.198s] -- The CXX compiler identification is GNU 11.4.0
+[0.207s] -- Detecting C compiler ABI info
+[0.287s] -- Detecting C compiler ABI info - done
+[0.296s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.297s] -- Detecting C compile features
+[0.297s] -- Detecting C compile features - done
+[0.301s] -- Detecting CXX compiler ABI info
+[0.385s] -- Detecting CXX compiler ABI info - done
+[0.396s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.396s] -- Detecting CXX compile features
+[0.397s] -- Detecting CXX compile features - done
+[0.400s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.570s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.664s] -- Found rclcpp: 16.0.8 (/opt/ros/humble/share/rclcpp/cmake)
+[0.723s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.728s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.741s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.763s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.794s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.878s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.880s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.992s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[1.024s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.079s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.089s] -- Looking for pthread.h
+[1.171s] -- Looking for pthread.h - found
+[1.171s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.258s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.259s] -- Found Threads: TRUE  
+[1.450s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system 
+[1.521s] -- Configuring done
+[1.583s] -- Generating done
+[1.585s] -- Build files have been written to: /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher
+[1.594s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[1.596s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8
+[1.650s] [ 50%] [32mBuilding CXX object CMakeFiles/uwb_publisher_node.dir/src/uwb_publisher_node.cpp.o[0m
+[8.468s] [100%] [32m[1mLinking CXX executable uwb_publisher_node[0m
+[9.034s] [100%] Built target uwb_publisher_node
+[9.046s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8
+[9.086s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher
+[9.094s] -- Install configuration: ""
+[9.094s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/lib/uwb_publisher/uwb_publisher_node
+[9.096s] -- Set runtime path of "/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/lib/uwb_publisher/uwb_publisher_node" to ""
+[9.096s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher//launch
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher//launch/uwb_publisher_launch.py
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/ament_index/resource_index/package_run_dependencies/uwb_publisher
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/ament_index/resource_index/parent_prefix_path/uwb_publisher
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/environment/ament_prefix_path.sh
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/environment/ament_prefix_path.dsv
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/environment/path.sh
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/environment/path.dsv
+[9.097s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/local_setup.bash
+[9.098s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/local_setup.sh
+[9.098s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/local_setup.zsh
+[9.098s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/local_setup.dsv
+[9.098s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/package.dsv
+[9.099s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/ament_index/resource_index/packages/uwb_publisher
+[9.099s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/cmake/uwb_publisherConfig.cmake
+[9.099s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/cmake/uwb_publisherConfig-version.cmake
+[9.099s] -- Installing: /home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher/share/uwb_publisher/package.xml
+[9.102s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher

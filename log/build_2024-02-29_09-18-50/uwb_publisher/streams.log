@@ -1,0 +1,64 @@
+[0.069s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[0.127s] -- The C compiler identification is GNU 11.4.0
+[0.190s] -- The CXX compiler identification is GNU 11.4.0
+[0.199s] -- Detecting C compiler ABI info
+[0.273s] -- Detecting C compiler ABI info - done
+[0.285s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.285s] -- Detecting C compile features
+[0.286s] -- Detecting C compile features - done
+[0.289s] -- Detecting CXX compiler ABI info
+[0.377s] -- Detecting CXX compiler ABI info - done
+[0.387s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.387s] -- Detecting CXX compile features
+[0.388s] -- Detecting CXX compile features - done
+[0.390s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.557s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.650s] -- Found rclcpp: 16.0.8 (/opt/ros/humble/share/rclcpp/cmake)
+[0.693s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.698s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.706s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.721s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.743s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.819s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.821s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.931s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.961s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.015s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.025s] -- Looking for pthread.h
+[1.106s] -- Looking for pthread.h - found
+[1.106s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.181s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.183s] -- Found Threads: TRUE  
+[1.380s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system 
+[1.450s] -- Configuring done
+[1.514s] -- Generating done
+[1.516s] -- Build files have been written to: /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher
+[1.525s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[1.528s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8
+[1.581s] [ 50%] [32mBuilding CXX object CMakeFiles/uwb_publisher_node.dir/src/uwb_publisher_node.cpp.o[0m
+[5.085s] In file included from [01m[K/usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/smart_ptr/detail/yield_k.hpp:23[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/smart_ptr/detail/spinlock.hpp:42[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/smart_ptr/shared_ptr.hpp:29[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/shared_ptr.hpp:17[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/date_time/time_clock.hpp:17[m[K,
+[5.085s]                  from [01m[K/usr/include/boost/date_time/posix_time/posix_time_types.hpp:10[m[K,
+[5.086s]                  from [01m[K/usr/include/boost/asio/time_traits.hpp:23[m[K,
+[5.086s]                  from [01m[K/usr/include/boost/asio/detail/timer_queue_ptime.hpp:22[m[K,
+[5.086s]                  from [01m[K/usr/include/boost/asio/detail/deadline_timer_service.hpp:29[m[K,
+[5.086s]                  from [01m[K/usr/include/boost/asio/basic_deadline_timer.hpp:25[m[K,
+[5.086s]                  from [01m[K/usr/include/boost/asio.hpp:25[m[K,
+[5.086s]                  from [01m[K/home/husnu/projects/uwb_publisher/uwb_publisher/src/uwb_publisher_node.cpp:3[m[K:
+[5.086s] [01m[K/usr/include/boost/bind.hpp:36:1:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.[m[K’
+[5.086s]    36 | [01;36m[KBOOST_PRAGMA_MESSAGE[m[K(
+[5.086s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~[m[K
+[5.107s] [01m[K/home/husnu/projects/uwb_publisher/uwb_publisher/src/uwb_publisher_node.cpp:[m[K In member function ‘[01m[Kvoid UWBPublisher::publishData()[m[K’:
+[5.107s] [01m[K/home/husnu/projects/uwb_publisher/uwb_publisher/src/uwb_publisher_node.cpp:25:40:[m[K [01;31m[Kerror: [m[K‘[01m[Kboost::asio::serial_port[m[K’ {aka ‘[01m[Kclass boost::asio::basic_serial_port<>[m[K’} has no member named ‘[01m[Kavailable[m[K’
+[5.107s]    25 |         if (serial.is_open() && serial.[01;31m[Kavailable[m[K()) {
+[5.108s]       |                                        [01;31m[K^~~~~~~~~[m[K
+[6.523s] gmake[2]: *** [CMakeFiles/uwb_publisher_node.dir/build.make:76: CMakeFiles/uwb_publisher_node.dir/src/uwb_publisher_node.cpp.o] Error 1
+[6.523s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/uwb_publisher_node.dir/all] Error 2
+[6.523s] gmake: *** [Makefile:146: all] Error 2
+[6.526s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8

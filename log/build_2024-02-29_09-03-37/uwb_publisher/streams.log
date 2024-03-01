@@ -1,0 +1,23 @@
+[0.066s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8
+[0.090s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.224s] -- Found rclcpp: 16.0.8 (/opt/ros/humble/share/rclcpp/cmake)
+[0.264s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.267s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.274s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.285s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.303s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.367s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.368s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.495s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.746s] -- Configuring done
+[0.804s] -- Generating done
+[0.806s] -- Build files have been written to: /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher
+[0.843s] [ 50%] [32mBuilding CXX object CMakeFiles/uwb_publisher_node.dir/src/uwb_publisher_node.cpp.o[0m
+[0.852s] [01m[K/home/husnu/projects/uwb_publisher/uwb_publisher/src/uwb_publisher_node.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Krclcpp/rclcpp.hpp: No such file or directory
+[0.853s]     1 | #include [01;31m[K<rclcpp/rclcpp.hpp>[m[K
+[0.853s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[0.853s] compilation terminated.
+[0.853s] gmake[2]: *** [CMakeFiles/uwb_publisher_node.dir/build.make:76: CMakeFiles/uwb_publisher_node.dir/src/uwb_publisher_node.cpp.o] Error 1
+[0.853s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/uwb_publisher_node.dir/all] Error 2
+[0.854s] gmake: *** [Makefile:146: all] Error 2
+[0.856s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher -- -j8 -l8

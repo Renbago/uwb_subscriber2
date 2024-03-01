@@ -1,0 +1,60 @@
+[0.080s] Invoking command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher': /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
+[0.200s] -- The C compiler identification is GNU 11.4.0
+[0.316s] -- The CXX compiler identification is GNU 11.4.0
+[0.327s] -- Detecting C compiler ABI info
+[0.413s] -- Detecting C compiler ABI info - done
+[0.422s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.422s] -- Detecting C compile features
+[0.423s] -- Detecting C compile features - done
+[0.427s] -- Detecting CXX compiler ABI info
+[0.517s] -- Detecting CXX compiler ABI info - done
+[0.526s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.527s] -- Detecting CXX compile features
+[0.527s] -- Detecting CXX compile features - done
+[0.531s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.696s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.803s] -- Found rclcpp: 16.0.8 (/opt/ros/humble/share/rclcpp/cmake)
+[0.859s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.867s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.878s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.894s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.918s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.000s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[1.004s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[1.112s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[1.141s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.191s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.202s] -- Looking for pthread.h
+[1.282s] -- Looking for pthread.h - found
+[1.283s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.360s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.361s] -- Found Threads: TRUE  
+[1.597s] Error parsing '/home/husnu/projects/uwb_publisher/uwb_publisher/package.xml':
+[1.644s] Traceback (most recent call last):
+[1.644s]   File "/opt/ros/humble/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 150, in <module>
+[1.644s]     main()
+[1.644s]   File "/opt/ros/humble/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 53, in main
+[1.644s]     raise e
+[1.645s]   File "/opt/ros/humble/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 49, in main
+[1.645s]     package = parse_package_string(
+[1.645s]   File "/usr/lib/python3/dist-packages/catkin_pkg/package.py", line 788, in parse_package_string
+[1.645s]     pkg.validate(warnings=warnings)
+[1.645s]   File "/usr/lib/python3/dist-packages/catkin_pkg/package.py", line 330, in validate
+[1.645s]     raise InvalidPackage('\n'.join(errors), self.filename)
+[1.645s] catkin_pkg.package.InvalidPackage: Error(s) in package '/home/husnu/projects/uwb_publisher/uwb_publisher/package.xml':
+[1.645s] Package version "0.1" does not follow version conventions
+[1.661s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:95 (message):
+[1.661s]   execute_process(/usr/bin/python3
+[1.661s]   /opt/ros/humble/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py
+[1.661s]   /home/husnu/projects/uwb_publisher/uwb_publisher/package.xml
+[1.661s]   /home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher/ament_cmake_core/package.cmake)
+[1.661s]   returned error code 1
+[1.661s] Call Stack (most recent call first):
+[1.661s]   /opt/ros/humble/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)
+[1.661s]   /opt/ros/humble/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)
+[1.661s]   CMakeLists.txt:26 (ament_package)
+[1.661s] 
+[1.662s] [0m
+[1.662s] -- Configuring incomplete, errors occurred!
+[1.662s] See also "/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher/CMakeFiles/CMakeOutput.log".
+[1.670s] Invoked command in '/home/husnu/projects/uwb_publisher/uwb_publisher/build/uwb_publisher' returned '1': /usr/bin/cmake /home/husnu/projects/uwb_publisher/uwb_publisher -DCMAKE_INSTALL_PREFIX=/home/husnu/projects/uwb_publisher/uwb_publisher/install/uwb_publisher
