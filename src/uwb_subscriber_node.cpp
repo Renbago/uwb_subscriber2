@@ -12,7 +12,6 @@ std::vector<float> distance_list;
 std::vector<float> lastDistance1;
 std::vector<float> lastDistance2;
 std::vector<float> lastDistance3;
-std::vector<float> lastDistance4;
 std::vector<float> rx_power_list;
 std::vector<float> robot_x;
 std::vector<float> robot_y;
@@ -20,6 +19,7 @@ std::vector<std::chrono::steady_clock::time_point> last_occurrence_list;
 
 
 const int NUM_POINTS = 3;
+bool calculate = false;
 
 // Structure to represent a point in 2D space
 struct Point {
@@ -80,37 +80,42 @@ private:
         {
             RCLCPP_INFO(this->get_logger(), "Last 3 Robot Pose: (%f, %f), (%f, %f), (%f, %f)",
             robot_x[0], robot_y[0], robot_x[1], robot_y[1], robot_x[2], robot_y[2]);
-            for (size_t i = 0; i < anchor_addr_list.size(); i++)
+            if (calculate == 1 && 0 == (std::any_of(lastDistance1.begin(), lastDistance1.end(), [](float distance) { return distance == 0; }) ||
+                std::any_of(lastDistance2.begin(), lastDistance2.end(), [](float distance) { return distance == 0; }) ||
+                std::any_of(lastDistance3.begin(), lastDistance3.end(), [](float distance) { return distance == 0; })))
             {
-                RCLCPP_INFO(this->get_logger(), "Anchor %s - Distance: %f, RX Power: %f",
-                            anchor_addr_list[i].c_str(), distance_list[i], rx_power_list[i]);
-                
-                Point points[NUM_POINTS] = {{robot_x[0], robot_y[0]}, {robot_x[1],robot_y[1]}, {robot_x[2],robot_y[2]}};
-                double distances[NUM_POINTS] = {lastDistance1[i], lastDistance2[i], lastDistance3[i]};
-                // Initial guess for the unknown point's position
-                Point p = {1, 1};
-
-                // Gradient descent parameters
-                double learning_rate = 0.01;
-                int iterations = 1000;
-                double tolerance = 1e-6;
-
-                // Gradient Descent Algorithm
-                for (int i = 0; i < iterations; ++i) 
+                for (size_t i = 0; i < anchor_addr_list.size(); i++)
                 {
-                    Point grad = grad_F(p, points, distances);
-                    Point new_p = {p.x - learning_rate * grad.x, p.y - learning_rate * grad.y};
+                    RCLCPP_INFO(this->get_logger(), "Anchor %s - Distance: %f, RX Power: %f",
+                                anchor_addr_list[i].c_str(), distance_list[i], rx_power_list[i]);
 
-                    // Check for convergence
-                    double change = std::sqrt((new_p.x - p.x) * (new_p.x - p.x) + (new_p.y - p.y) * (new_p.y - p.y));
-                    if (change < tolerance) {
-                        std::cout << "Converged after " << i << " iterations." << std::endl;
-                        std::cout << "Estimated position: (" << p.x << ", " << p.y << ")" << std::endl;
-                        std::cout << "////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;   
-                        break;
-                    }
-                    p = new_p;
-                }           
+                    Point points[NUM_POINTS] = {{robot_x[0], robot_y[0]}, {robot_x[1],robot_y[1]}, {robot_x[2],robot_y[2]}};
+                    double distances[NUM_POINTS] = {lastDistance1[i], lastDistance2[i], lastDistance3[i]};
+                    // Initial guess for the unknown point's position
+                    Point p = {1, 1};
+
+                    // Gradient descent parameters
+                    double learning_rate = 0.01;
+                    int iterations = 1000;
+                    double tolerance = 1e-6;
+
+                    // Gradient Descent Algorithm
+                    for (int i = 0; i < iterations; ++i) 
+                    {
+                        Point grad = grad_F(p, points, distances);
+                        Point new_p = {p.x - learning_rate * grad.x, p.y - learning_rate * grad.y};
+
+                        // Check for convergence
+                        double change = std::sqrt((new_p.x - p.x) * (new_p.x - p.x) + (new_p.y - p.y) * (new_p.y - p.y));
+                        if (change < tolerance) {
+                            std::cout << "Converged after " << i << " iterations." << std::endl;
+                            std::cout << "Estimated position: (" << p.x << ", " << p.y << ")" << std::endl;
+                            std::cout << "////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;   
+                            break;
+                        }
+                        p = new_p;
+                    }           
+                }
             }
             robot_x.erase(robot_x.begin());
             robot_y.erase(robot_y.begin());
@@ -132,18 +137,25 @@ private:
             lastDistance1.push_back(distance);
             lastDistance2.push_back(0);
             lastDistance3.push_back(0);
-            lastDistance4.push_back(0);
             rx_power_list.push_back(rxPower);
             last_occurrence_list.push_back(std::chrono::steady_clock::now());
         }
         else 
         {    
             auto index = it - anchor_addr_list.begin();
-            distance_list[index] = distance;
-            lastDistance4[index] = lastDistance3[index];
-            lastDistance3[index] = lastDistance2[index];
-            lastDistance2[index] = lastDistance1[index];
-            lastDistance1[index] = distance;
+
+            if (distance_list[index] - distance > 0.15f || distance_list[index] - distance < 0.15f)
+            {
+                distance_list[index] = distance;
+                lastDistance3[index] = lastDistance2[index];
+                lastDistance2[index] = lastDistance1[index];
+                lastDistance1[index] = distance;
+                calculate = true;
+            }
+            else
+            {
+                calculate = false;
+            }
             rx_power_list[index] = rxPower;
             last_occurrence_list[index] = std::chrono::steady_clock::now();
         }
@@ -162,7 +174,6 @@ private:
                 lastDistance1.erase(lastDistance1.begin() + i);
                 lastDistance2.erase(lastDistance2.begin() + i);
                 lastDistance3.erase(lastDistance3.begin() + i);
-                lastDistance4.erase(lastDistance4.begin() + i);
                 rx_power_list.erase(rx_power_list.begin() + i);
                 last_occurrence_list.erase(last_occurrence_list.begin() + i);
                 i--; 
