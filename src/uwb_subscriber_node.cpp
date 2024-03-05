@@ -32,42 +32,31 @@ float polygon_longitude_ = 0.05;
 std::vector<std::chrono::steady_clock::time_point> last_occurrence_list;
 
 
-const int NUM_POINTS = 3;
-bool calculate = false;
-
-// Structure to represent a point in 2D space
-struct Point {
-    double x, y;
-};
-
-// Function to calculate the sum of squared differences
-double F(const Point& p, const Point points[], const double distances[]) {
-    double sum = 0.0;
-    for (int i = 0; i < NUM_POINTS; ++i) {
-        double dx = p.x - points[i].x;
-        double dy = p.y - points[i].y;
-        double distance = std::sqrt(dx * dx + dy * dy);
-        double diff = distance - distances[i];
-        sum += diff * diff;
-    }
-    return sum;
+// Function to calculate mean
+double calculateMean(const std::vector<double>& values) {
+    double sum = std::accumulate(values.begin(), values.end(), 0.0);
+    return sum / values.size();
 }
 
-// Function to calculate the gradient of F
-Point grad_F(const Point& p, const Point points[], const double distances[]) {
-    Point grad = {0.0, 0.0};
-    for (int i = 0; i < NUM_POINTS; ++i) {
-        double dx = p.x - points[i].x;
-        double dy = p.y - points[i].y;
-        double distance = std::sqrt(dx * dx + dy * dy);
-        if (distance == 0) continue; // Prevent division by zero
-        double diff = distance - distances[i];
-        grad.x += (dx / distance) * diff;
-        grad.y += (dy / distance) * diff;
+// Function to calculate standard deviation
+double calculateStdDev(const std::vector<double>& values, double mean) {
+    double squareSum = std::accumulate(values.begin(), values.end(), 0.0, 
+                                       [mean](double acc, double val) { return acc + (val - mean) * (val - mean); });
+    return std::sqrt(squareSum / values.size());
+}
+
+// Function to filter measurements based on standard deviation
+std::vector<double> filterMeasurements(const std::vector<double>& measurements, double nStdDev) {
+    double mean = calculateMean(measurements);
+    double stdDev = calculateStdDev(measurements, mean);
+    
+    std::vector<double> filtered;
+    for (double measurement : measurements) {
+        if (std::abs(measurement - mean) <= nStdDev * stdDev) {
+            filtered.push_back(measurement);
+        }
     }
-    grad.x *= 2;
-    grad.y *= 2;
-    return grad;
+    return filtered;
 }
 
 class UWBSubscriberNode : public rclcpp::Node
