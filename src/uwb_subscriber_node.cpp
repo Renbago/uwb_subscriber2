@@ -30,7 +30,7 @@ float polygon_latitude_ = 0.0;
 float polygon_longitude_ = 0.05;
 
 std::vector<std::chrono::steady_clock::time_point> last_occurrence_list;
-
+std::vector<std::vector<float>> recentMeasurements; // A new vector to store recent measurements for each anchor
 
 // Function to calculate mean
 double calculateMean(const std::vector<double>& values) {
@@ -195,38 +195,58 @@ private:
         std::string id = uwbData.substr(0, 4);
         float distance = std::stof(uwbData.substr(4, 5)) / 1000;
         float rxPower = std::stof(uwbData.substr(9)) / 1000 * -1;
-
+    
+        // First, check if the anchor is already known
         auto it = std::find(anchor_addr_list.begin(), anchor_addr_list.end(), id);
+        size_t index;
         if (it == anchor_addr_list.end())   
         {
+            // New anchor, add its details to the lists
             anchor_addr_list.push_back(id);
-            distance_list.push_back(distance);
+            distance_list.push_back(distance); // This initial distance could also be placed in a temporary buffer if needed
             lastDistance1.push_back(distance);
             lastDistance2.push_back(0);
             lastDistance3.push_back(0);
             rx_power_list.push_back(rxPower);
             last_occurrence_list.push_back(std::chrono::steady_clock::now());
+            recentMeasurements.push_back(std::vector<float>{distance}); // Initialize the recent measurements buffer for this anchor
+            index = recentMeasurements.size() - 1; // Set index to the last added element
         }
-        else 
-        {    
-            auto index = it - anchor_addr_list.begin();
-
-            if (distance_list[index] - distance > 0.15f || distance_list[index] - distance < 0.15f)
+        else
+        {
+            // Existing anchor, find its index
+            index = std::distance(anchor_addr_list.begin(), it);
+            recentMeasurements[index].push_back(distance); // Add new measurement to buffer
+    
+            if (recentMeasurements[index].size() > N) // Assuming N is defined elsewhere
             {
-                distance_list[index] = distance;
-                lastDistance3[index] = lastDistance2[index];
-                lastDistance2[index] = lastDistance1[index];
-                lastDistance1[index] = distance;
-                calculate = true;
+                // Apply standard deviation filter
+                float mean = calculateMean(recentMeasurements[index]);
+                float stdDev = calculateStdDev(recentMeasurements[index], mean);
+    
+                // Optionally filter out measurements
+                recentMeasurements[index].erase(
+                    std::remove_if(recentMeasurements[index].begin(), recentMeasurements[index].end(),
+                                   [mean, stdDev](float x) { return std::abs(x - mean) > M * stdDev; }),
+                    recentMeasurements[index].end());
+    
+                // Use the mean of the filtered measurements as the distance
+                distance = calculateMean(recentMeasurements[index]);
             }
-            else
-            {
-                calculate = false;
-            }
+    
+            // Update distance and power lists
+            distance_list[index] = distance;
             rx_power_list[index] = rxPower;
             last_occurrence_list[index] = std::chrono::steady_clock::now();
+    
+            // Update last distances for trilateration
+            lastDistance3[index] = lastDistance2[index];
+            lastDistance2[index] = lastDistance1[index];
+            lastDistance1[index] = distance;
+            calculate = true;
         }
     }
+
 
     void check_inactive_ids()
     {
