@@ -12,11 +12,6 @@ using namespace arma;
 using namespace std;
 
 std::vector<std::string> anchor_addr_list;
-std::vector<double> distance_list;
-std::vector<double> lastDistance1;
-std::vector<double> lastDistance2;
-std::vector<double> lastDistance3;
-std::vector<double> rx_power_list;
 std::vector<double> robot_x;
 std::vector<double> robot_y;
 std::vector<double> object_x;
@@ -32,8 +27,6 @@ double robotRotationW_;
 double objecPositionX_;
 double objecPositionY_;
 double robotRotationYaw_ = 0.0;
-double polygon_latitude_ = 0.0;
-double polygon_longitude_ = 0.05;
 double robot_yaw;
 
 std::vector<std::chrono::steady_clock::time_point> last_occurrence_list;
@@ -58,79 +51,7 @@ std::string id;
 double distance_;
 double rxPower;
 
-bool calculatable = true;
 bool first = true;
-
-// Utility function to calculate Euclidean distance
-double calculateDistance(double x1, double y1, double x2, double y2) {
-    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-}
-
-// Function to update the EKF with distance measurements
-void ekfUpdate(vec& x, mat& P, const vector<double>& distances, const vector<Point>& anchors, const mat& R) {
-    int n = distances.size(); // Number of distance measurements
-    vec z = vec(n); // Measurement vector
-    // Fill the measurement vector with the actual measured distances
-    for (int i = 0; i < n; ++i) {
-        z(i) = distances[i];
-    }
-    // Expected distance calculations
-    vec h = vec(n);
-    for (int i = 0; i < n; ++i) {
-        h(i) = calculateDistance(x(0), x(1), anchors[i].x, anchors[i].y);
-    }
-    // Calculate the measurement residual
-    vec y = z - h;
-    // Calculate the Jacobian matrix H of the measurement function
-    mat H = mat(n, 2, fill::zeros);
-    for (int i = 0; i < n; ++i) {
-        double dx = x(0) - anchors[i].x;
-        double dy = x(1) - anchors[i].y;
-        double d = calculateDistance(x(0), x(1), anchors[i].x, anchors[i].y);
-
-        // Prevent division by zero
-        if (d == 0) d = 1e-5;
-
-        H(i,0) = dx / d; // Partial derivative of distance wrt x
-        H(i,1) = dy / d; // Partial derivative of distance wrt y
-    }
-    // Measurement update
-    mat S = H * P * H.t() + R; // System uncertainty
-    mat K = P * H.t() * inv(S); // Kalman gain
-    x = x + K * y; // Update state estimate
-    P = P - K * H * P; // Update estimate uncertainty
-}
-
-// Function to calculate mean
-double calculateMean(const std::vector<double>& values) {
-    double sum = std::accumulate(values.begin(), values.end(), 0.0);
-    return sum / values.size();
-}
-
-double calculateStdDev(const std::vector<double>& values, double mean) {
-    double squareSum = std::accumulate(values.begin(), values.end(), 0.0, 
-                                       [mean](double acc, double val) { return acc + (val - mean) * (val - mean); });
-    return std::sqrt(squareSum / values.size());
-}
-
-
-// Function to filter measurements based on standard deviation
-std::vector<double> filterMeasurements(const std::vector<double>& measurements, double nStdDev) {
-    double mean = calculateMean(measurements);
-    double stdDev = calculateStdDev(measurements, mean);
-    
-    std::vector<double> filtered;
-    for (double measurement : measurements) 
-    {
-        if (std::abs(measurement - mean) <= nStdDev * stdDev) 
-        {
-            filtered.push_back(measurement);
-        }
-    }
-    return filtered;
-}
-
-
 
 class UWBSubscriberNode : public rclcpp::Node
 {
@@ -212,7 +133,7 @@ private:
             path_distance_ = std::abs(last_distance - distance_);
         }
 
-        if (path_distance_ >= 0.25 && calculatable)
+        if (path_distance_ >= 0.6)
         {
             rotateCoordinates(robotPositionX_, robotPositionY_,  robotRotationYaw_);
             
@@ -232,7 +153,6 @@ private:
                 anchor_addr_list.push_back(id);
                 distances.push_back(anchor_distance);
                 anchor_distance.push_back(distance_);
-                rx_power_list.push_back(rxPower);
                 last_occurrence_list.push_back(std::chrono::steady_clock::now());
                 recentMeasurements.push_back(std::vector<double>{distance_}); // Initialize the recent measurements buffer for this anchor
                 index = recentMeasurements.size() - 1; // Set index to the last added element
@@ -250,7 +170,6 @@ private:
                 distances[index] = anchor_distance;
                 
                 // Update distance and power lists
-                rx_power_list[index] = rxPower;
                 last_occurrence_list[index] = std::chrono::steady_clock::now();
             }
 
@@ -304,11 +223,6 @@ private:
             if (time_diff.count() >= 30)
             {
                 anchor_addr_list.erase(anchor_addr_list.begin() + i);
-                distance_list.erase(distance_list.begin() + i);
-                lastDistance1.erase(lastDistance1.begin() + i);
-                lastDistance2.erase(lastDistance2.begin() + i);
-                lastDistance3.erase(lastDistance3.begin() + i);
-                rx_power_list.erase(rx_power_list.begin() + i);
                 last_occurrence_list.erase(last_occurrence_list.begin() + i);
                 i--; 
             }
