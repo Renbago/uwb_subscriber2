@@ -9,6 +9,7 @@
 #include <armadillo>
 
 using namespace arma;
+using namespace std;
 
 std::vector<std::string> anchor_addr_list;
 std::vector<double> distance_list;
@@ -20,6 +21,9 @@ std::vector<double> robot_x;
 std::vector<double> robot_y;
 std::vector<double> object_x;
 std::vector<double> object_y;
+std::vector<double> anchor_distance;
+std::vector<std::vector<double>> distances;
+std::vector<std::vector<double>> anchors;
 
 double robotPositionX_;
 double robotPositionY_;
@@ -40,14 +44,8 @@ struct Point {
 };
 
 // Path tracking parameters
-double first_distance = 0.0;
+double last_distance = 0.0;
 double path_distance_ = 0.0;
-
-// Gradient Descent Parameters
-Point estimatedPos = {0.0, 0.0}; // Initial guess
-double learningRate = 0.04;
-int maxIterations = 1000;
-double tolerance = 1e-5;
 
 // Standard deviation filter parameters
 const size_t N = 10; // Example: consider the last 10 measurements
@@ -63,25 +61,44 @@ double rxPower;
 bool calculatable = true;
 bool first = true;
 
-double calculateDistance(const Point& p1, const Point& p2) {
-    double dx = p2.x - p1.x;
-    double dy = p2.y - p1.y;
-    return std::sqrt(dx * dx + dy * dy);
+// Utility function to calculate Euclidean distance
+double calculateDistance(double x1, double y1, double x2, double y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
 
-Point trilateration(const Point& A, double d1, const Point& B, double d2, const Point& C, double d3) {
-    // Using the trilateration formulas to calculate x and y
-    double a = 2*B.x - 2*A.x;
-    double b = 2*B.y - 2*A.y;
-    double c = d1*d1 - d2*d2 - A.x*A.x + B.x*B.x - A.y*A.y + B.y*B.y;
-    double d = 2*C.x - 2*B.x;
-    double e = 2*C.y - 2*B.y;
-    double f = d2*d2 - d3*d3 - B.x*B.x + C.x*C.x - B.y*B.y + C.y*C.y;
+// Function to update the EKF with distance measurements
+void ekfUpdate(vec& x, mat& P, const vector<double>& distances, const vector<Point>& anchors, const mat& R) {
+    int n = distances.size(); // Number of distance measurements
+    vec z = vec(n); // Measurement vector
+    // Fill the measurement vector with the actual measured distances
+    for (int i = 0; i < n; ++i) {
+        z(i) = distances[i];
+    }
+    // Expected distance calculations
+    vec h = vec(n);
+    for (int i = 0; i < n; ++i) {
+        h(i) = calculateDistance(x(0), x(1), anchors[i].x, anchors[i].y);
+    }
+    // Calculate the measurement residual
+    vec y = z - h;
+    // Calculate the Jacobian matrix H of the measurement function
+    mat H = mat(n, 2, fill::zeros);
+    for (int i = 0; i < n; ++i) {
+        double dx = x(0) - anchors[i].x;
+        double dy = x(1) - anchors[i].y;
+        double d = calculateDistance(x(0), x(1), anchors[i].x, anchors[i].y);
 
-    double x = (c*e - f*b) / (e*a - b*d);
-    double y = (c*d - a*f) / (b*d - a*e);
+        // Prevent division by zero
+        if (d == 0) d = 1e-5;
 
-    return Point{x, y};
+        H(i,0) = dx / d; // Partial derivative of distance wrt x
+        H(i,1) = dy / d; // Partial derivative of distance wrt y
+    }
+    // Measurement update
+    mat S = H * P * H.t() + R; // System uncertainty
+    mat K = P * H.t() * inv(S); // Kalman gain
+    x = x + K * y; // Update state estimate
+    P = P - K * H * P; // Update estimate uncertainty
 }
 
 // Function to calculate mean
@@ -184,16 +201,17 @@ private:
         robotRotationW_ = msg->pose.orientation.w;
         yawCalculation(robotRotationZ_, robotRotationW_);
         rotateCoordinates(robotPositionX_, robotPositionY_, robot_yaw);
-        Point object = {objecPositionX_, objecPositionY_};
+
         if (first)
         {
-            first_distance = distance_;
+            last_distance = distance_;
             first = false;
         }
         else
         {
-            path_distance_ = std::abs(first_distance - distance_);
+            path_distance_ = std::abs(last_distance - distance_);
         }
+
         if (path_distance_ >= 0.25 && calculatable)
         {
             rotateCoordinates(robotPositionX_, robotPositionY_,  robotRotationYaw_);
@@ -202,18 +220,18 @@ private:
             robot_y.push_back(robotPositionY_);
             object_x.push_back(objecPositionX_);
             object_y.push_back(objecPositionY_);
+
             
             // First, check if the anchor is already known
             auto it = std::find(anchor_addr_list.begin(), anchor_addr_list.end(), id);
+            
             size_t index;
-            if (it == anchor_addr_list.end())   
+            if (it == anchor_addr_list.end())
             {
                 // New anchor, add its details to the lists
                 anchor_addr_list.push_back(id);
-                distance_list.push_back(distance_); // This initial distance could also be placed in a temporary buffer if needed
-                lastDistance1.push_back(distance_);
-                lastDistance2.push_back(0);
-                lastDistance3.push_back(0);
+                distances.push_back(anchor_distance);
+                anchor_distance.push_back(distance_);
                 rx_power_list.push_back(rxPower);
                 last_occurrence_list.push_back(std::chrono::steady_clock::now());
                 recentMeasurements.push_back(std::vector<double>{distance_}); // Initialize the recent measurements buffer for this anchor
@@ -221,61 +239,50 @@ private:
             }
             else
             {   
+                std::cout << "Anchor already known" << std::endl;
                 // Existing anchor, find its index
                 index = std::distance(anchor_addr_list.begin(), it);
-                recentMeasurements[index].push_back(distance_); // Add new measurement to buffer
-                
-                if (recentMeasurements[index].size() > N) // Assuming N is defined elsewhere
+                anchor_distance.push_back(distance_);
+                if (anchor_distance.size() > 10)
                 {
-                    // Apply standard deviation filter
-                    double mean = calculateMean(recentMeasurements[index]);
-                    double stdDev = calculateStdDev(recentMeasurements[index], mean);
-        
-                    // Optionally filter out measurements
-                    recentMeasurements[index].erase(
-                        std::remove_if(recentMeasurements[index].begin(), recentMeasurements[index].end(),
-                                    [mean, stdDev](double x) { return std::abs(x - mean) > M * stdDev; }),
-                        recentMeasurements[index].end());
-        
-                    // Use the mean of the filtered measurements as the distance
-                    std::vector<double> filteredMeasurements = filterMeasurements(recentMeasurements[index], 2); // Filtering with 2 standard deviations
-                    // distance_ = calculateMean(filteredMeasurements);
+                    anchor_distance.erase(anchor_distance.begin());
                 }
-        
+                distances[index] = anchor_distance;
+                
                 // Update distance and power lists
-                distance_list[index] = distance_;
                 rx_power_list[index] = rxPower;
                 last_occurrence_list[index] = std::chrono::steady_clock::now();
-        
-                // Update last distances for trilateration
-                lastDistance3[index] = lastDistance2[index];
-                lastDistance2[index] = lastDistance1[index];
-                lastDistance1[index] = distance_;
             }
 
-            if (object_x.size() > 3)
-            {           
-
-                std::cout << "Last 3 Pos: (" << object_x[0] << ", " << object_y[0] << "), (" << object_x[1] << ", " 
-                        << object_y[1] << "), (" << object_x[2] << ", " << object_y[2] << ")" << std::endl;
-                
-                std::cout << "Last 3 Distance: (" << lastDistance1[0] << ", " << lastDistance2[0] << ", " << lastDistance3[0] << ")" << std::endl;
-                
-                if (0 == (std::any_of(lastDistance1.begin(), lastDistance1.end(), [](double distance) { return distance == 0; }) ||
-                    std::any_of(lastDistance2.begin(), lastDistance2.end(), [](double distance) { return distance == 0; }) ||
-                    std::any_of(lastDistance3.begin(), lastDistance3.end(), [](double distance) { return distance == 0; })))
+            RCLCPP_INFO(this->get_logger(), "objec_x size: %d", object_x.size());
+            RCLCPP_INFO(this->get_logger(), "distances[0] siez : %d", distances[0].size());
+            if (object_x.size() >= 10)
+            {
+                RCLCPP_INFO(this->get_logger(), "Last 10 Robot Pos:");
+                for (int i = 0; i < object_x.size(); i++)
                 {
-                    std::vector<Point> anchors = {{object_x[0], object_y[0]}, {object_x[1], object_y[1]}, {object_x[2], object_y[2]}};
-                    std::vector<double> distances = {lastDistance1[0], lastDistance2[0], lastDistance3[0]};    
-                    Point estimatedPos = trilateration(anchors[0], distances[0], anchors[1], distances[1], anchors[2], distances[2]);
-                    std::cout << "Estimated Position: (" << estimatedPos.x << ", " << estimatedPos.y << ")" << std::endl;
+                    RCLCPP_INFO(this->get_logger(), "Robot Pos: %f, %f", robot_x[i], robot_y[i]);
                 }
+
+                RCLCPP_INFO(this->get_logger(), "Last 10 Object Pos:");
+                for (int i = 0; i < object_x.size(); i++)
+                {
+                    RCLCPP_INFO(this->get_logger(), "Object Pos: %f, %f", object_x[i], object_y[i]);
+                }
+
+                RCLCPP_INFO(this->get_logger(), "Last 10 Anchor Distances:");
+                for (int i = 0; i < distances[0].size(); i++)
+                {
+                    RCLCPP_INFO(this->get_logger(), "Anchor Distances: %f", distances[0][i]);
+                }
+
                 object_x.erase(object_x.begin());
                 object_y.erase(object_y.begin());
                 robot_x.erase(robot_x.begin());
                 robot_y.erase(robot_y.begin());
             }
-            first_distance = distance_;
+
+            last_distance = distance_;
             path_distance_ = 0.0;
         }
     }
@@ -287,7 +294,6 @@ private:
         distance_ = std::stod(uwbData.substr(4, 5)) / 1000;
         rxPower = std::stod(uwbData.substr(9)) / 1000 * -1;
     }
-
 
     void check_inactive_ids()
     {
