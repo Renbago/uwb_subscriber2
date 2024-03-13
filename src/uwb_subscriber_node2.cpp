@@ -69,7 +69,7 @@ public:
     }
 
 private:
-    void yawCalculation(double robot_z, double robot_w)
+    void yawCalculation(double orientation_z, double orientation_w)
     {
         double robotRotationZ = robot_z;
         double robotRotationW = robot_w;
@@ -95,7 +95,7 @@ private:
         vec estimatedRobot_y_coordinates = {0.0};
 
         // Create a 2xN matrix
-        mat points = join_vert(estimatedRobot_x_coordinates.t(), estimatedRobot_y_coordinates.t());
+        arma::mat points = join_vert(estimatedRobot_x_coordinates.t(), estimatedRobot_y_coordinates.t());
 
         // Create rotation matrix
         double radians = datum::pi * robotRotationYaw / 180.0; // Convert degrees to radians
@@ -114,14 +114,16 @@ private:
         objecPositionY_ = newY1;
     }
 
+
+
     void robot_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) 
     {
         robotPositionX_ = msg->pose.position.x;
         robotPositionY_ = msg->pose.position.y;
         robotRotationZ_ = msg->pose.orientation.z;
         robotRotationW_ = msg->pose.orientation.w;
-        yawCalculation(robotRotationZ_, robotRotationW_);
-        rotateCoordinates(robotPositionX_, robotPositionY_, robot_yaw);
+        yawCalculation(msg->pose.orientation.z, msg->pose.orientation.w);
+        rotateCoordinates(msg->pose.position.x, msg->pose.position.y, robot_yaw);
 
         if (first)
         {
@@ -130,7 +132,7 @@ private:
         }
         else
         {
-            path_distance_ = std::abs(last_distance - distance_);
+            path_distance_ += std::abs(last_distance - distance_);
         }
 
         if (path_distance_ >= 0.6)
@@ -200,10 +202,10 @@ private:
                 robot_x.erase(robot_x.begin());
                 robot_y.erase(robot_y.begin());
             }
-
-            last_distance = distance_;
-            path_distance_ = 0.0;
+            path_distance_ = 0;
         }
+        last_distance = distance_;
+
     }
 
     void uwb_data_callback(const std_msgs::msg::String::SharedPtr msg)
